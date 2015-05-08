@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: Louis-Michel Couture
+  description: Lock your Bedrock WordPress with htpasswd
+  company: O2 Web
+  license: "license (MIT)"
+  min_ansible_version: 1.8
+  platforms:
+    - name: Ubuntu
+     versions:
+     - trusty
+  categories:
+    - development
+    - web
+dependencies: []
+

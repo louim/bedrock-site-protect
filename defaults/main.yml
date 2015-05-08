@@ -1,0 +1,2 @@
+# path to auth files
+htpasswd_path: /etc/htpasswd

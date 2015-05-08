@@ -1,0 +1,53 @@
+---
+
+- name: Add htpasswd files
+  htpasswd:
+    path: "{{ htpasswd_path }}/{{ item.0.name }}"
+    name: "{{ item.1.name }}"
+    password: "{{ item.1.password }}"
+    crypt_scheme: "{{ item.1.crypt|default(omit) }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_subelements:
+    - wordpress_sites
+    - htpasswd
+  when: item.0.htpasswd is defined
+
+- name: Set Nginx Auth Type
+  lineinfile:
+    line: auth_basic "Restricted";
+    dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
+  with_dict:
+    - wordpress_sites
+  when: item.0.htpasswd is defined
+  notify: reload nginx
+
+- name: Set Nginx Auth file.
+  lineinfile:
+    line: "auth_basic_user_file {{ htpasswd_path }}/{{ item.0.name }};"
+    dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
+  with_dict:
+    - wordpress_sites
+  when: item.0.htpasswd is defined
+  notify: reload nginx
+
+- name: Unset Nginx Auth Type
+  lineinfile:
+    line: auth_basic "Restricted";
+    state: absent
+    dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
+  with_dict:
+    - wordpress_sites
+  when: item.0.htpasswd is not defined
+  notify: reload nginx
+
+- name: Unset Nginx Auth file.
+  lineinfile:
+    line: "auth_basic_user_file {{ htpasswd_path }}/{{ item.0.name }};"
+    state: absent
+    dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
+  with_dict:
+    - wordpress_sites
+  when: item.0.htpasswd is not defined
+  notify: reload nginx
