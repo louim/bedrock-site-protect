@@ -1,17 +1,17 @@
 Bedrock Site protect
 ====================
 
-This role is specifically crafted to go with [Bedrock-Ansible](https://github.com/roots/bedrock-ansible). It will allow you to set Basic authentication on your bedrock websites. This is especially useful during development if you have a staging environment that you dont't want the world to see.
+This role is specifically crafted to go with [Bedrock-Ansible](https://github.com/roots/bedrock-ansible). It will allow you to set Basic authentication on your bedrock websites. This is especially useful during development if you have a staging environment that you don't want the world to see.
 
 Requirements
 ------------
 
-This role is made for Bedrock-Ansible, so it is dependent on it. 
+This role is made for Bedrock-Ansible, so it depends on it. 
 
 Role Variables
 --------------
 
-The role will read from the `wordpres_sites` dict set in environments files. It will search for the `htpasswd` key. Example:
+The role will read from the `wordpres_sites` dict set in environments files of Bedrock-Ansible. It will search for the `htpasswd` key. Example:
 
 <pre>
 wordpress_sites:
@@ -43,7 +43,7 @@ wordpress_sites:
       db_password: example_dbpassword
 </pre>
 
-You can also set the `htpasswd_path`. By default it is set to `/etc/htpasswd`. If you want to set this parameter, it is recommended that you set it in the `group_vars/all` file, so it wil be the same for all environments.
+You can also set the `htpasswd_path` to specify the folder used to store `htpasswd` files. The default is `/etc/htpasswd`. If you want to set this parameter, it is recommended that you set it in the `group_vars/all` file, so it will be the same for all environments.
 
 
 Dependencies
@@ -54,7 +54,7 @@ Dependencies
 Example Playbook
 ----------------
 
-Add this role (`louim.bedrock-site-protect`) to the `requirements.yml` file in your Bedrock installation, then re-run the `ansible-galaxy install -r requirements.yml` to install the new role. You might need to add the `-f` to force install of previously downloaded roles.
+Add this role (`louim.bedrock-site-protect`) to the `requirements.yml` file in your Bedrock installation, then re-run the `ansible-galaxy install -r requirements.yml` to install the new role. You might need to add the `-f` option to force install of previously downloaded roles.
 
 You will also need to add the role to the `server.yml` like so: 
 
