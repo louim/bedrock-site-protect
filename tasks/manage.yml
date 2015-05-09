@@ -1,35 +1,32 @@
 ---
-
-- name: Add htpasswd files
+- name: Set htpasswd
   htpasswd:
-    path: "{{ htpasswd_path }}/{{ item.0.name }}"
-    name: "{{ item.1.name }}"
-    password: "{{ item.1.password }}"
-    crypt_scheme: "{{ item.1.crypt|default(omit) }}"
+    path: "{{ htpasswd_path }}/{{ item.key }}"
+    name: "{{ item.value.htpasswd.name }}"
+    password: "{{ item.value.htpasswd.password }}"
+    crypt_scheme: "{{ item.value.htpasswd.crypt|default(omit) }}"
     owner: root
     group: root
     mode: 0644
-  with_subelements:
-    - wordpress_sites
-    - htpasswd
-  when: item.0.htpasswd is defined
+  with_dict: wordpress_sites
+  when: item.value.htpasswd is defined
 
 - name: Set Nginx Auth Type
   lineinfile:
-    line: auth_basic "Restricted";
+    line: "  auth_basic 'Restricted';"
+    insertafter: index index.php;
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict:
-    - wordpress_sites
-  when: item.0.htpasswd is defined
+  with_dict: wordpress_sites
+  when: item.value.htpasswd is defined
   notify: reload nginx
 
 - name: Set Nginx Auth file.
   lineinfile:
-    line: "auth_basic_user_file {{ htpasswd_path }}/{{ item.0.name }};"
+    line: "  auth_basic_user_file {{ htpasswd_path }}/{{ item.key }};"
+    insertafter: auth_basic 'Restricted';
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict:
-    - wordpress_sites
-  when: item.0.htpasswd is defined
+  with_dict: wordpress_sites
+  when: item.value.htpasswd is defined
   notify: reload nginx
 
 - name: Unset Nginx Auth Type
@@ -37,17 +34,15 @@
     line: auth_basic "Restricted";
     state: absent
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict:
-    - wordpress_sites
-  when: item.0.htpasswd is not defined
+  with_dict: wordpress_sites
+  when: item.value.htpasswd is not defined
   notify: reload nginx
 
 - name: Unset Nginx Auth file.
   lineinfile:
-    line: "auth_basic_user_file {{ htpasswd_path }}/{{ item.0.name }};"
+    line: "auth_basic_user_file {{ htpasswd_path }}/{{ item.key }};"
     state: absent
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict:
-    - wordpress_sites
-  when: item.0.htpasswd is not defined
+  with_dict: wordpress_sites
+  when: item.value.htpasswd is not defined
   notify: reload nginx

@@ -29,8 +29,8 @@ wordpress_sites:
       enabled: false
       subdomains: false
     <b>htpasswd:
-      - { name: user1, password: secret1 }
-      - { name: user2, password: secret2 }</b>
+        name: user
+        password: secret</b>
     ssl:
       enabled: false
     system_cron: true
@@ -55,6 +55,14 @@ Example Playbook
 ----------------
 
 Add this role (`louim.bedrock-site-protect`) to the `requirements.yml` file in your Bedrock installation, then re-run the `ansible-galaxy install -r requirements.yml` to install the new role. You might need to add the `-f` to force install of previously downloaded roles.
+
+You will also need to add the role to the `server.yml` like so: 
+
+```
+roles:
+  ... other Bedrock roles ...
+  - { role: bedrock-site-protect, tags: [wordpress, wordpress-setup] }
+```
 
 Follow the example above to get started. if the `htpasswd` key is removed from the environment file, the protection will be removed on the next deploy.
 
