@@ -6,7 +6,7 @@ This role is specifically crafted to go with [Trellis](https://github.com/roots/
 Requirements
 ------------
 
-This role is made for Trellis(previously known as Bedrock-Ansible), so it depends on it. 
+This role is made for Trellis (previously known as Bedrock-Ansible), so it depends on it. 
 
 Role Variables
 --------------
