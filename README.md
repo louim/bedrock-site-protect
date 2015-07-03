@@ -1,17 +1,17 @@
 Bedrock Site protect
 ====================
 
-This role is specifically crafted to go with [Bedrock-Ansible](https://github.com/roots/bedrock-ansible). It will allow you to set Basic authentication on your bedrock websites. This is especially useful during development if you have a staging environment that you don't want the world to see.
+This role is specifically crafted to go with [Trellis](https://github.com/roots/trellis). It will allow you to set Basic authentication on your bedrock websites. This is especially useful during development if you have a staging environment that you don't want the world to see.
 
 Requirements
 ------------
 
-This role is made for Bedrock-Ansible, so it depends on it. 
+This role is made for Trellis(previously known as Bedrock-Ansible), so it depends on it. 
 
 Role Variables
 --------------
 
-The role will read from the `wordpres_sites` dict set in environments files of Bedrock-Ansible. It will search for the `htpasswd` key. Example:
+The role will read from the `wordpres_sites` dict set in environments files of Trellis. It will search for the `htpasswd` key. Example:
 
 <pre>
 wordpress_sites:
@@ -49,18 +49,18 @@ You can also set the `htpasswd_path` to specify the folder used to store `htpass
 Dependencies
 ------------
 
-[Bedrock-Ansible](https://github.com/roots/bedrock-ansible).
+[Trellis](https://github.com/roots/trellis).
 
 Example Playbook
 ----------------
 
-Add this role (`louim.bedrock-site-protect`) to the `requirements.yml` file in your Bedrock installation, then re-run the `ansible-galaxy install -r requirements.yml` to install the new role. You might need to add the `-f` option to force install of previously downloaded roles.
+Add this role (`louim.bedrock-site-protect`) to the `requirements.yml` file in your Trellis installation, then re-run the `ansible-galaxy install -r requirements.yml` to install the new role. You might need to add the `-f` option to force install of previously downloaded roles.
 
 You will also need to add the role to the `server.yml` like so: 
 
 ```
 roles:
-  ... other Bedrock roles ...
+  ... other Trellis roles ...
   - { role: bedrock-site-protect, tags: [wordpress, wordpress-setup] }
 ```
 
