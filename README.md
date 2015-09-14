@@ -54,7 +54,14 @@ Dependencies
 Example Playbook
 ----------------
 
-Add this role (`louim.bedrock-site-protect`) to the `requirements.yml` file in your Trellis installation, then re-run the `ansible-galaxy install -r requirements.yml` to install the new role. You might need to add the `-f` option to force install of previously downloaded roles.
+Add this role (`louim.bedrock-site-protect`) to the `requirements.yml` file in your Trellis installation like so:
+
+```
+- name: bedrock-site-protect
+  src: louim.bedrock-site-protect
+```
+
+Then re-run the `ansible-galaxy install -r requirements.yml` to install the new role. You might need to add the `-f` option to force install of previously downloaded roles.
 
 You will also need to add the role to the `server.yml` like so: 
 
