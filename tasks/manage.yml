@@ -14,7 +14,7 @@
 - name: Set Nginx Auth Type
   lineinfile:
     line: "  auth_basic 'Restricted';"
-    insertafter: index index.php;
+    insertafter: index index.php index.htm index.html;
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
   with_dict: wordpress_sites
   when: item.value.htpasswd is defined
