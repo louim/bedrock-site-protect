@@ -73,6 +73,16 @@ roles:
 
 Follow the example above to get started. if the `htpasswd` key is removed from the environment file, the protection will be removed on the next deploy.
 
+Adding / Removing Basic Authentication
+-------------------------------
+**To Add**: Run the Trellis command to set up your previously configured remote server: `ansible-playbook server.yml -e env=<environment>`
+**To Remove**: Remove the following `htpasswd` block:
+<pre><b>htpasswd:
+           name: user
+           password: secret</b>
+</pre>
+in the `wordpress_sites` dict set, and redeploy via: `./deploy.sh <environment> <site name>`.
+
 License
 -------
 
