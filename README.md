@@ -11,7 +11,7 @@ This role is made for Trellis (previously known as Bedrock-Ansible), so it depen
 Role Variables
 --------------
 
-The role will read from the `wordpres_sites` dict set in environments files of Trellis. It will search for the `htpasswd` key. Example:
+The role will read from the `wordpress_sites` dict set in environments files of Trellis. It will search for the `htpasswd` key. Example:
 
 <pre>
 wordpress_sites:
@@ -54,7 +54,7 @@ Dependencies
 Example Playbook
 ----------------
 
-Add this role (`louim.bedrock-site-protect`) to the `requirements.yml` file in your Trellis installation like so:
+To get started, add this role (`louim.bedrock-site-protect`) to the `requirements.yml` file in your Trellis installation like so:
 
 ```
 - name: bedrock-site-protect
@@ -71,17 +71,18 @@ roles:
   - { role: bedrock-site-protect, tags: [wordpress, wordpress-setup] }
 ```
 
-Follow the example above to get started. if the `htpasswd` key is removed from the environment file, the protection will be removed on the next deploy.
 
 Adding / Removing Basic Authentication
--------------------------------
+--------------------------------------
 **To Add**: Run the Trellis command to set up your previously configured remote server: `ansible-playbook server.yml -e env=<environment>`
 **To Remove**: Remove the following `htpasswd` block:
-<pre><b>htpasswd:
-           name: user
-           password: secret</b>
-</pre>
-in the `wordpress_sites` dict set, and redeploy via: `./deploy.sh <environment> <site name>`.
+
+<pre>
+  <b>htpasswd:
+    name: user
+    password: secret</b></pre>
+
+in the `wordpress_sites` dict set, and reconfigure via: `ansible-playbook server.yml -e env=<environment>`.
 
 License
 -------
@@ -91,4 +92,4 @@ MIT
 Author Information
 ------------------
 
-© [Louis-Michel Couture](https://twitter.com/louim) 2015. Role inspired by [ansible-htpasswd](https://github.com/weareinteractive/ansible-htpasswd) by [franklinkim](https://github.com/franklinkim)
+© [Louis-Michel Couture](https://twitter.com/louim) 2016. Role inspired by [ansible-htpasswd](https://github.com/weareinteractive/ansible-htpasswd) by [franklinkim](https://github.com/franklinkim)
