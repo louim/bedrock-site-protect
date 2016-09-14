@@ -1,14 +1,14 @@
 ---
 - name: Set htpasswd
   htpasswd:
-    path: "{{ htpasswd_path }}/{{ item.key }}"
+    path: "{{ htpasswd_path }}/{{ item.site_hosts.canonical }}"
     name: "{{ item.value.htpasswd.name }}"
     password: "{{ item.value.htpasswd.password }}"
     crypt_scheme: "{{ item.value.htpasswd.crypt|default(omit) }}"
     owner: root
     group: root
     mode: 0644
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   when: item.value.htpasswd is defined
 
 - name: Set Nginx Auth Type
@@ -16,7 +16,7 @@
     line: "  auth_basic 'Restricted';"
     insertafter: index index.php index.htm index.html;
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   when: item.value.htpasswd is defined
   notify: reload nginx
 
@@ -25,7 +25,7 @@
     line: "  auth_basic_user_file {{ htpasswd_path }}/{{ item.key }};"
     insertafter: auth_basic 'Restricted';
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   when: item.value.htpasswd is defined
   notify: reload nginx
 
@@ -34,7 +34,7 @@
     line: auth_basic "Restricted";
     state: absent
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   when: item.value.htpasswd is not defined
   notify: reload nginx
 
@@ -43,6 +43,6 @@
     line: "auth_basic_user_file {{ htpasswd_path }}/{{ item.key }};"
     state: absent
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   when: item.value.htpasswd is not defined
   notify: reload nginx

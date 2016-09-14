@@ -6,7 +6,7 @@ This role is specifically crafted to go with [Trellis](https://github.com/roots/
 Requirements
 ------------
 
-This role is made for Trellis (previously known as Bedrock-Ansible), so it depends on it. 
+This role is made for Trellis (previously known as Bedrock-Ansible), so it depends on it.
 
 Role Variables
 --------------
@@ -17,33 +17,22 @@ The role will read from the `wordpress_sites` dict set in environments files of 
 wordpress_sites:
   example.com:
     site_hosts:
-      - example.dev
+      - canonical: example.dev
     local_path: '../site' # path targeting local Bedrock site directory (relative to Ansible root)
-    repo: git@github.com:roots/bedrock.git
-    site_install: true
-    site_title: Example Site
-    admin_user: admin
-    admin_password: admin
-    admin_email: admin@example.dev    
+    local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
+    admin_email: admin@example.dev
     multisite:
       enabled: false
-      subdomains: false
+    ssl:
+      enabled: false
+    cache:
+      enabled: false
     <b>htpasswd:
         name: user
         password: secret</b>
-    ssl:
-      enabled: false
-    system_cron: true
-    env:
-      wp_home: http://example.dev
-      wp_siteurl: http://example.dev/wp
-      wp_env: development
-      db_name: example_dev
-      db_user: example_dbuser
-      db_password: example_dbpassword
 </pre>
 
-You can also set the `htpasswd_path` to specify the folder used to store `htpasswd` files. The default is `/etc/htpasswd`. If you want to set this parameter, it is recommended that you set it in the `group_vars/all` file, so it will be the same for all environments.
+You can also set the `htpasswd_path` to specify the folder used to store `htpasswd` files. The default is `/etc/htpasswd`. If you want to set this parameter, it is recommended that you set it in the `group_vars/all/main.yml` file, so it will be the same for all environments.
 
 
 Dependencies
@@ -59,16 +48,17 @@ To get started, add this role (`louim.bedrock-site-protect`) to the `requirement
 ```
 - name: bedrock-site-protect
   src: louim.bedrock-site-protect
+  version: 1.1
 ```
 
 Then re-run the `ansible-galaxy install -r requirements.yml` to install the new role. You might need to add the `-f` option to force install of previously downloaded roles.
 
-You will also need to add the role to the `server.yml` like so: 
+You will also need to add the role to the `server.yml` like so:
 
 ```
 roles:
   ... other Trellis roles ...
-  - { role: bedrock-site-protect, tags: [wordpress, wordpress-setup] }
+  - { role: bedrock-site-protect, tags: [nginx, htpasswd] }
 ```
 
 
@@ -80,7 +70,8 @@ Adding / Removing Basic Authentication
 <pre>
   <b>htpasswd:
     name: user
-    password: secret</b></pre>
+    password: secret</b>
+</pre>
 
 in the `wordpress_sites` dict set, and reconfigure via: `ansible-playbook server.yml -e env=<environment>`.
 
