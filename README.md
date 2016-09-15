@@ -11,15 +11,16 @@ This role is made for Trellis (previously known as Bedrock-Ansible), so it depen
 Role Variables
 --------------
 
-The role will read from the `wordpress_sites` dict set in environments files of Trellis. It will search for the `htpasswd` key. Example:
+The role will read from the `wordpress_sites` dict set in environments files of Trellis. It will search for the `htpasswd` key.
 
+Example:
+--------
 <pre>
 wordpress_sites:
   example.com:
     site_hosts:
       - canonical: example.dev
     local_path: '../site' # path targeting local Bedrock site directory (relative to Ansible root)
-    local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
     admin_email: admin@example.dev
     multisite:
       enabled: false
@@ -27,11 +28,11 @@ wordpress_sites:
       enabled: false
     cache:
       enabled: false
-    <b>htpasswd:
-        name: user
-        password: secret</b>
+    <b>htpasswd:</b>
+      <b>- name: user</b>
+        <b>password: secret</b>
 </pre>
-
+You may want to add the `htpasswd` block in the `vault.yml` file so password will be encrypted.
 You can also set the `htpasswd_path` to specify the folder used to store `htpasswd` files. The default is `/etc/htpasswd`. If you want to set this parameter, it is recommended that you set it in the `group_vars/all/main.yml` file, so it will be the same for all environments.
 
 
@@ -58,7 +59,7 @@ You will also need to add the role to the `server.yml` like so:
 ```
 roles:
   ... other Trellis roles ...
-  - { role: bedrock-site-protect, tags: [nginx, htpasswd] }
+  - { role: bedrock-site-protect, tags: [htpasswd] }
 ```
 
 
