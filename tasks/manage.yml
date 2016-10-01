@@ -16,7 +16,7 @@
     group: root
     mode: 0644
   with_subelements:
-    - wordpress_sites
+    - "{{ wordpress_sites }}"
     - htpasswd
     - skip_missing: yes
 
