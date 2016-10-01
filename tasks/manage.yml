@@ -1,48 +1,55 @@
 ---
+
+- name: Delete current htpasswd
+  file:
+    path: "{{ htpasswd_path }}/{{ item.value.site_hosts.0.canonical }}"
+    state: absent
+  with_dict: "{{ wordpress_sites }}"
+
 - name: Set htpasswd
   htpasswd:
-    path: "{{ htpasswd_path }}/{{ item.key }}"
-    name: "{{ item.value.htpasswd.name }}"
-    password: "{{ item.value.htpasswd.password }}"
-    crypt_scheme: "{{ item.value.htpasswd.crypt|default(omit) }}"
+    path: "{{ htpasswd_path }}/{{ item.0.site_hosts.0.canonical }}"
+    name: "{{ item.1.name }}"
+    password: "{{ item.1.password }}"
+    crypt_scheme: "{{ item.1.crypt|default(omit) }}"
     owner: root
     group: root
     mode: 0644
-  with_dict: wordpress_sites
-  when: item.value.htpasswd is defined
+  with_subelements:
+    - wordpress_sites
+    - htpasswd
+    - skip_missing: yes
+
+- name: Unset Nginx Auth Type
+  lineinfile:
+    regexp: "auth_basic 'Restricted';$"
+    state: absent
+    dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
+  with_dict: "{{ wordpress_sites }}"
+  notify: reload nginx
+
+- name: Unset Nginx Auth file.
+  lineinfile:
+    regexp: "auth_basic_user_file {{ htpasswd_path }}/.*;"
+    state: absent
+    dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
+  with_dict: "{{ wordpress_sites }}"
+  notify: reload nginx
 
 - name: Set Nginx Auth Type
   lineinfile:
     line: "  auth_basic 'Restricted';"
     insertafter: index index.php index.htm index.html;
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   when: item.value.htpasswd is defined
   notify: reload nginx
 
 - name: Set Nginx Auth file.
   lineinfile:
-    line: "  auth_basic_user_file {{ htpasswd_path }}/{{ item.key }};"
+    line: "  auth_basic_user_file {{ htpasswd_path }}/{{ item.value.site_hosts.0.canonical }};"
     insertafter: auth_basic 'Restricted';
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   when: item.value.htpasswd is defined
-  notify: reload nginx
-
-- name: Unset Nginx Auth Type
-  lineinfile:
-    line: auth_basic "Restricted";
-    state: absent
-    dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict: wordpress_sites
-  when: item.value.htpasswd is not defined
-  notify: reload nginx
-
-- name: Unset Nginx Auth file.
-  lineinfile:
-    line: "auth_basic_user_file {{ htpasswd_path }}/{{ item.key }};"
-    state: absent
-    dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict: wordpress_sites
-  when: item.value.htpasswd is not defined
   notify: reload nginx
