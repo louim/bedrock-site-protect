@@ -31,6 +31,8 @@ wordpress_sites:
     <b>htpasswd:</b>
       <b>- name: user</b>
         <b>password: secret</b>
+      <b>- name: user2</b>
+        <b>password: secret2</b>
 </pre>
 You may want to add the `htpasswd` block in the `vault.yml` file so password will be encrypted.
 You can also set the `htpasswd_path` to specify the folder used to store `htpasswd` files. The default is `/etc/htpasswd`. If you want to set this parameter, it is recommended that you set it in the `group_vars/all/main.yml` file, so it will be the same for all environments.
