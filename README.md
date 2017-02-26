@@ -72,8 +72,8 @@ Adding / Removing Basic Authentication
 
 <pre>
   <b>htpasswd:
-    name: user
-    password: secret</b>
+    - name: user
+      password: secret</b>
 </pre>
 
 in the `wordpress_sites` dict set, and reconfigure via: `ansible-playbook server.yml -e env=<environment>`.
