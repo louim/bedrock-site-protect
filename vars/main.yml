@@ -1,0 +1,2 @@
+# Just merge wordpress_sites and vault_wordpress_sites
+bsp_wordpress_sites: "{{ wordpress_sites|combine(vault_wordpress_sites, recursive=True) }}"
