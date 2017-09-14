@@ -2,13 +2,13 @@
 
 - name: Delete current htpasswd
   file:
-    path: "{{ htpasswd_path }}/{{ item.value.site_hosts.0.canonical }}"
+    path: "{{ htpasswd_path }}/{{ site_hosts_canonical|first }}"
     state: absent
   with_dict: "{{ wordpress_sites }}"
 
 - name: Set htpasswd
   htpasswd:
-    path: "{{ htpasswd_path }}/{{ item.0.site_hosts.0.canonical }}"
+    path: "{{ htpasswd_path }}/{{ item.0.site_hosts|map(attribute='canonical')|list|first }}"
     name: "{{ item.1.name }}"
     password: "{{ item.1.password }}"
     crypt_scheme: "{{ item.1.crypt|default(omit) }}"
@@ -16,7 +16,7 @@
     group: root
     mode: 0644
   with_subelements:
-    - "{{ wordpress_sites }}"
+    - "{{ bsp_wordpress_sites }}"
     - htpasswd
     - skip_missing: yes
 
@@ -41,15 +41,15 @@
     line: "  auth_basic 'Restricted';"
     insertafter: index index.php index.htm index.html;
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict: "{{ wordpress_sites }}"
+  with_dict: "{{ bsp_wordpress_sites }}"
   when: item.value.htpasswd is defined
   notify: reload nginx
 
 - name: Set Nginx Auth file.
   lineinfile:
-    line: "  auth_basic_user_file {{ htpasswd_path }}/{{ item.value.site_hosts.0.canonical }};"
+    line: "  auth_basic_user_file {{ htpasswd_path }}/{{ site_hosts_canonical|first }};"
     insertafter: auth_basic 'Restricted';
     dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict: "{{ wordpress_sites }}"
+  with_dict: "{{ bsp_wordpress_sites }}"
   when: item.value.htpasswd is defined
   notify: reload nginx
