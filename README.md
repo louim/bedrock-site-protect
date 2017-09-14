@@ -51,7 +51,7 @@ To get started, add this role (`louim.bedrock-site-protect`) to the `requirement
 ```
 - name: bedrock-site-protect
   src: louim.bedrock-site-protect
-  version: 1.1.0
+  version: 1.2.0
 ```
 
 Then re-run the `ansible-galaxy install -r requirements.yml` to install the new role. You might need to add the `-f` option to force install of previously downloaded roles.
