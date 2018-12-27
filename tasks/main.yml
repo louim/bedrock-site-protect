@@ -1,12 +1,12 @@
 ---
 
-- include: install.yml
+- import_tasks: install.yml
   tags:
     - web
     - htpasswd
     - htpasswd-install
 
-- include: manage.yml
+- import_tasks: manage.yml
   tags:
     - web
     - htpasswd
