@@ -10,7 +10,7 @@ galaxy_info:
     - trusty
     - xenial
     - bionic
-  categories:
+  galaxy_tags:
   - development
   - web
 dependencies: []
