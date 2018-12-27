@@ -2,14 +2,14 @@
 galaxy_info:
   author: Louis-Michel Couture
   description: Lock your Bedrock WordPress with htpasswd
-  company: Hookt Studios
   license: "license (MIT)"
-  min_ansible_version: 1.8
+  min_ansible_version: 2.4
   platforms:
   - name: Ubuntu
     versions:
     - trusty
     - xenial
+    - bionic
   categories:
   - development
   - web
