@@ -1,11 +1,10 @@
 ---
 
-- name: Installing packages
+- name: Installing passlib package for python {{ ansible_python_version[0] }}
   apt:
-    pkg: "{{ item }}"
+    pkg: "{{ passlib_package[ansible_python_version[0]] }}"
     state: present
-  with_items:
-    - python-passlib
+
 
 - name: Creating htpasswd folder
   file:

@@ -1,2 +1,7 @@
 # path to auth files
 htpasswd_path: /etc/htpasswd
+
+# required package depending on python version
+passlib_package:
+  '2': python-passlib
+  '3': python3-passlib
