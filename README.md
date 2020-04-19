@@ -61,7 +61,7 @@ You will also need to add the role to the `server.yml` like so:
 ```
 roles:
   ... other Trellis roles ...
-  - { role: bedrock-site-protect, tags: [htpasswd] }
+  - { role: bedrock-site-protect, tags: [htpasswd, wordpress, wordpress-setup, letsencrypt] }
 ```
 
 
